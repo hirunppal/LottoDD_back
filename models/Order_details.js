@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
       },
-      finalPrice: {
+      Price: {
         type: DataTypes.DECIMAL.UNSIGNED,
         allowNull: true,
         defaultValue: 80,
@@ -19,5 +19,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
+  OrderDetail.associate = (db) => {
+    OrderDetail.belongsTo(db.Seller, {
+      foreignKey: {
+        allowNull: false,
+        name: "sellerId",
+      },
+      onDelete: "restrict",
+      onUpdate: "restrict",
+    });
+    OrderDetail.belongsTo(db.Product, {
+      foreignKey: {
+        allowNull: false,
+        // unique: true,
+        name: "productId",
+      },
+      onDelete: "restrict",
+      onUpdate: "restrict",
+    });
+  };
   return OrderDetail;
 };

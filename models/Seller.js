@@ -39,5 +39,23 @@ module.exports = (sequelize, DataTypes) => {
     },
     { underscored: true }
   );
+  Seller.associate = (db) => {
+    Seller.hasMany(db.Product, {
+      foreignKey: {
+        allowNull: false,
+        name: "sellerId",
+      },
+      onDelete: "restrict",
+      onUpdate: "restrict",
+    });
+    Seller.hasMany(db.OrderDetail, {
+      foreignKey: {
+        allowNull: false,
+        name: "sellerId",
+      },
+      onDelete: "restrict",
+      onUpdate: "restrict",
+    });
+  };
   return Seller;
 };

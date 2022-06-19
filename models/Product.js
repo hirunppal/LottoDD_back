@@ -23,7 +23,14 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       registerStat: {
-        type: DataTypes.ENUM(["REGISTERING", "APPROVED", "REJECTED", "APPEAL"]),
+        type: DataTypes.ENUM([
+          "REGISTERING",
+          "APPROVED",
+          "REJECTED",
+          "APPEAL",
+          "PENDING",
+          "EXPIRED",
+        ]),
         allowNull: false,
         validate: {
           notEmpty: true,
@@ -37,8 +44,33 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: true,
         },
       },
+      prizeDate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
+      },
     },
     { underscored: true }
   );
+  Product.associate = (db) => {
+    Product.belongsTo(db.Seller, {
+      foreignKey: {
+        allowNull: false,
+        name: "sellerId",
+      },
+      onDelete: "restrict",
+      onUpdate: "restrict",
+    });
+    Product.hasMany(db.OrderDetail, {
+      foreignKey: {
+        allowNull: false,
+        name: "productId",
+      },
+      onDelete: "restrict",
+      onUpdate: "restrict",
+    });
+  };
   return Product;
 };
